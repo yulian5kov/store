@@ -1,10 +1,12 @@
-import { useState } from "react";
-import "./Product.scss";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import BalanceIcon from "@mui/icons-material/Balance";
-import useFetch from "../../hooks/useFetch";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { useState } from "react";
 import { useParams } from "react-router";
+import useFetch from "../../hooks/useFetch";
+import "./Product.scss";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../redux/cartReducer";
 
 // const REACT_APP_API_TOKEN = "175f16c305184e0a8820acb7a06f6cc38df05124d697d0d416d10fc8b256e042139ce89a359aae9c32c847cd29c03fdc228a70a177aa2f9d02c1ef5c7e57ca9a64408b49b17f0c773d1a979a2b5c756bfc589cb02a8abe38f4dc992ee044c342627ce8e96e7edf60645e79c6729d568079c13b62ba777275461686688c63f989"
 // const REACT_APP_API_URL = "http://localhost:1337/api"
@@ -14,7 +16,7 @@ const Product = () => {
 	const id = useParams().id;
 	const [selectedImg, setSelectedImg] = useState("img");
 	const [quantity, setQuantity] = useState(1);
-
+	const dispatch = useDispatch()
 	const { data, loading, error } = useFetch(`/products/${id}?populate=*`);
 
 	return (
@@ -75,7 +77,14 @@ const Product = () => {
 								+
 							</button>
 						</div>
-						<button className="add">
+						<button className="add" onClick={()=>dispatch(addToCart({
+							id:data.id,
+							title:data.attributes.title,
+							desc:data.attributes.desc,
+							price:data.attributes.price,
+							img:data.attributes.img.data.attributes.url,
+							quantity
+						}))}>
 							<AddShoppingCartIcon /> ADD TO CART
 						</button>
 						<div className="links">
