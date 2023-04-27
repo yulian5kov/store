@@ -8,12 +8,20 @@ const Products = () => {
 	const catId = parseInt(useParams().id);
 	const [maxPrice, setMaxPrice] = useState(1000);
 	const [sort, setSort] = useState(null);
+	const [selectedSubCats, setSelectedSubCats] = useState([]);
 
 	const { data, loading, error } = useFetch(
 		`/sub-categories?[filters][categories][id][$eq]=${catId}`
 	);
 
-	console.log(data);
+	const handleChange = (e) => {
+		const value = e.target.value
+		const isChecked = e.target.checked
+	
+		setSelectedSubCats(isChecked ? [...selectedSubCats, value] : selectedSubCats.filter(item=>item !== value))
+	}
+	
+	console.log(selectedSubCats)
 
 	return (
 		<div className="products">
@@ -27,6 +35,7 @@ const Products = () => {
 								type="checkbox"
 								id={item.id}
 								value={item.id}
+								onChange={handleChange}
 							/>
 							<label htmlFor={item.id}>{item.attributes.title}</label>
 						</div>
@@ -79,6 +88,7 @@ const Products = () => {
 					catId={catId}
 					maxPrice={maxPrice}
 					sort={sort}
+					subCats={selectedSubCats}
 				/>
 			</div>
 		</div>
