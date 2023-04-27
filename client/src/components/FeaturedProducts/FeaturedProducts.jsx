@@ -14,7 +14,7 @@ const FeaturedProducts = ({ type }) => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const res = await axios.get(REACT_APP_API_URL+"/products?populate=*", {
+				const res = await axios.get(REACT_APP_API_URL+`/products?populate=*&[filters][type][$eq]=${type}`, {
 					headers:{
 						Authorization: "Bearer " + REACT_APP_API_TOKEN,
 					},
